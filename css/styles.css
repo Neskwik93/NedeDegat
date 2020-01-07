@@ -44,3 +44,8 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
     overflow: auto;
     color: black;
 }
+
+#displayNbRelance {
+    font-size: 20px;
+    color: red;
+}

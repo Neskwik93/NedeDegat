@@ -1,13 +1,16 @@
 let tableBody = document.getElementById('tableBody');
 let tableHead = document.getElementById('tableHead');
 let inputDe = document.getElementById('inputDe');
+let displayNbRelance = document.getElementById('displayNbRelance');
+let btnSwitchMod = document.getElementById('btnSwitchMod');
 
-let btnBoss = document.getElementById('btnBoss');
 let btnSaveBoss = document.getElementById('btnSaveBoss');
 let btnNewBoss = document.getElementById('btnNewBoss');
 let btnApplyToBoss = document.getElementById('btnApplyToBoss');
-let zoneBoss = document.getElementById('zoneBoss');
 let inputPvBoss = document.getElementById('inputPvBoss');
+let inputBdBoss = document.getElementById('inputBdBoss');
+let containerinputDegatImmediat = document.getElementById('containerinputDegatImmediat');
+let inputDegatImmediat = document.getElementById('inputDegatImmediat');
 let selectBossArmor = document.getElementById('selectBossArmor');
 let alertPv = document.getElementById('alertPv');
 let modeBoss = false;
@@ -27,6 +30,9 @@ let switchCuirRigide = document.getElementById('switchCuirRigide');
 let switchCuirSouple = document.getElementById('switchCuirSouple');
 let switchSansArmure = document.getElementById('switchSansArmure');
 let switchToutArmor = document.getElementById('switchToutArmor');
+
+let zoneClassique = document.getElementById('zoneClassique');
+let zoneBoss = document.getElementById('zoneBoss');
 
 let chat = document.getElementById('chat');
 
@@ -57,17 +63,28 @@ lancer = () => {
 }
 
 checkApplyToBoss = () => {
-    if (ttArmeInTable.length === 1 && modeBoss && boss) {
+    if (ttArmeInTable.length === 1 && boss && inputDe.value) {
         btnApplyToBoss.style.display = 'inline-block';
     } else {
         btnApplyToBoss.style.display = 'none';
     }
 }
 
-testEnter = (event, pv = false) => {
+testEnter = (event, type) => {
     if (event.key === 'Enter') {
-        if (!pv) lancer();
-        else saveBoss();
+        switch (type) {
+            case 'inputDe':
+                lancer();
+                break;
+            case 'degatImmediat':
+                if (inputDegatImmediat.value && inputDegatImmediat.value > 0) {
+                    applyDegat(inputDegatImmediat.value);
+                }
+                break;
+            case 'saveBoss':
+                saveBoss();
+                break;
+        }
     }
 }
 
@@ -157,20 +174,24 @@ checkAllArmor = () => {
     lancer();
 }
 
-switchBossMode = () => {
+switchBossMod = () => {
     modeBoss = !modeBoss;
     zoneBoss.style.display = modeBoss ? 'block' : 'none';
-    btnBoss.innerHTML = modeBoss ? 'Mode classique' : 'Mode BOSS';
+    zoneClassique.style.display = modeBoss ? 'none' : 'block';
+    btnSwitchMod.innerHTML = modeBoss ? 'Mode classique' : 'Mode BOSS';
     checkApplyToBoss();
 }
 
 saveBoss = () => {
     if (inputPvBoss.value && inputPvBoss.value > 0) {
-        boss = { pv: inputPvBoss.value, armor: selectBossArmor.value };
+        if (!inputBdBoss.value) inputBdBoss.value = 0;
+        boss = { pv: inputPvBoss.value, armor: selectBossArmor.value, bd: inputBdBoss.value };
         inputPvBoss.disabled = true;
+        inputBdBoss.disabled = true;
         selectBossArmor.disabled = true;
         alertPv.style.display = 'none';
         btnNewBoss.style.display = 'inline-block';
+        containerinputDegatImmediat.style.display = 'flex';
         btnSaveBoss.style.display = 'none';
     } else {
         alertPv.style.display = 'block';
@@ -183,6 +204,8 @@ newBoss = () => {
     boss = null;
     inputPvBoss.value = null;
     inputPvBoss.disabled = false;
+    inputBdBoss.value = null;
+    inputBdBoss.disabled = false;
     selectBossArmor.disabled = false;
     btnNewBoss.style.display = 'none';
     btnSaveBoss.style.display = 'inline-block';
@@ -190,11 +213,24 @@ newBoss = () => {
 }
 
 applyToBoss = () => {
-    let valueUsed;
-    if (inputDe.value && inputDe.value > 150) {
+    let valueUsed = inputDe.value;
+    let reste = 0, nbRelance = 0;
+    valueUsed = valueUsed - boss.bd;
+    valueUsed = valueUsed < 0 ? 0 : valueUsed;
+    if (valueUsed && valueUsed > 150) {
+        reste = valueUsed - 150;
+        while (reste >= 20) {
+            reste -= 20;
+            nbRelance++
+        }
         valueUsed = 150;
+    }
+    if (nbRelance > 0) {
+        displayNbRelance.innerHTML = nbRelance + ' relance(s) possible(s)';
+        displayNbRelance.style.display = 'block';
     } else {
-        valueUsed = inputDe.value;
+        displayNbRelance.innerHTML = '';
+        displayNbRelance.style.display = 'none';
     }
     let val = global[ttArmeInTable[0]].find(degat => valueUsed >= degat.min && valueUsed <= degat.max);
     let degat = val[boss.armor];
@@ -203,6 +239,10 @@ applyToBoss = () => {
         critique = degat[degat.length - 1];
         degat = +degat.slice(0, degat.length - 1);
     }
+    applyDegat(degat, critique = null);
+}
+
+applyDegat = (degat, critique) => {
     if (boss.pv > 0) {
         boss.pv -= degat;
         if (boss.pv <= 0) {

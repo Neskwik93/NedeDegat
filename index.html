@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="bootstrap.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Nede</title>
 </head>
 
-<script src="global.js"></script>
+<script src="script/global.js"></script>
 
 <body>
     <!-- BINDING EXAMPLE -->
@@ -22,13 +22,13 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
-                            <div class="row mb-3">
+                            <div class="row">
                                 <div class="col-md-auto">
                                     <label for="inputDe">Valeur du dé</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input id="inputDe" class="myInput inputDe" type="number" ngBind="deValue"
-                                        onkeydown="testEnter(event)">
+                                    <input id="inputDe"  oninput="checkApplyToBoss()" class="myInput inputDe" type="number"
+                                        onkeydown="testEnter(event, 'inputDe')">
                                 </div>
                                 <div class="col-md-auto">
                                     <button class="btn btn-primary" onclick="lancer()">Lancer</button>
@@ -37,9 +37,14 @@
                                     <button class="btn btn-danger" onclick="applyToBoss()">Appliquer au boss</button>
                                 </div>
                                 <div class="col text-right">
-                                    <button class="btn btn-danger" id="btnBoss" onclick="switchBossMode()">
+                                    <button class="btn btn-danger" id="btnSwitchMod" onclick="switchBossMod()">
                                         Mode BOSS
                                     </button>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col" id="displayNbRelance" style="display: none;">
+                                    coucou
                                 </div>
                             </div>
                             <div class="row">
@@ -166,8 +171,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="zoneClassique">
                     <div class="row">
+                        <!-- TABLE DEGATS -->
                         <div class="col">
                             <div class="card bg-dark">
                                 <div class="card-body corps">
@@ -180,7 +186,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3" id="zoneBoss" style="display: none;">
+                        <!-- FIN TABLE DEGATS -->
+                        <div class="col-md-3">
                             <div class="card bg-dark">
                                 <div class="card-body">
                                     <div class="row mb-2">
@@ -198,15 +205,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mb-3" id="containerinputDegatImmediat" style="display: none;">
+                                        <div class="col-md-auto">
+                                            Dégats immédiats
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="myInput" id="inputDegatImmediat" onkeydown="testEnter(event, 'degatImmediat')">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="col-md-auto">
                                             PV
                                         </div>
                                         <div class="col">
-                                            <input type="number" class="myInput" id="inputPvBoss" onkeydown="testEnter(event, true)">
+                                            <input type="number" class="myInput" id="inputPvBoss" onkeydown="testEnter(event, 'saveBoss')">
                                         </div>
                                     </div>
-                                    <div class="row mt-2 mb-3">
+                                    <div class="row mb-3">
+                                        <div class="col-md-auto">
+                                            BD
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="myInput" id="inputBdBoss" onkeydown="testEnter(event, 'saveBoss')">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="col-md-auto">
                                             Armure
                                         </div>
@@ -237,6 +260,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-body" id="zoneBoss" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -244,5 +268,5 @@
 </body>
 
 </html>
-<script src="dataBinding.js"></script>
-<script src="script.js"></script>
+<!-- <script src="script/dataBinding.js"></script> -->
+<script src="script/script.js"></script>
