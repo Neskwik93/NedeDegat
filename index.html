@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Nede</title>
+</head>
+
+<script src="global.js"></script>
+
+<body>
+    <!-- BINDING EXAMPLE -->
+    <!-- <input type="text" ngBind="name">
+    <h4 ngView="name"></h4> -->
+    <div class="row">
+        <div class="col">
+            <div class="card bg-dark">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row mb-3">
+                                <div class="col-md-auto">
+                                    <label for="inputDe">Valeur du dé</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="inputDe" class="myInput inputDe" type="number" ngBind="deValue"
+                                        onkeydown="testEnter(event)">
+                                </div>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-primary" onclick="lancer()">Lancer</button>
+                                </div>
+                                <div class="col-md-auto" id="btnApplyToBoss" style="display: none;">
+                                    <button class="btn btn-danger" onclick="applyToBoss()">Appliquer au boss</button>
+                                </div>
+                                <div class="col text-right">
+                                    <button class="btn btn-danger" id="btnBoss" onclick="switchBossMode()">
+                                        Mode BOSS
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchTranchante"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchTranchante">
+                                            Tranchantes à 1 main
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchContondante"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchContondante">
+                                            Contondante
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch2Mains"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switch2Mains">
+                                            2 mains
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchPerfo"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchPerfo">
+                                            Perforation
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchToutArme"
+                                            onclick="checkAllWeapon()" checked>
+                                        <label class="custom-control-label" for="switchToutArme">
+                                            Tout
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchPlates"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchPlates">
+                                            Plates
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchCuirasse"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchCuirasse">
+                                            Cuirasse
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchEcailles"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchEcailles">
+                                            Ecailles
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchMaille"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchMaille">
+                                            Maille
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchCuirRigide"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchCuirRigide">
+                                            Cuir Rigide
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchCuirSouple"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchCuirSouple">
+                                            Cuir Souple
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchSansArmure"
+                                            onclick="lancer()" checked>
+                                        <label class="custom-control-label" for="switchSansArmure">
+                                            Sans Armure
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switchToutArmor"
+                                            onclick="checkAllArmor()" checked>
+                                        <label class="custom-control-label" for="switchToutArmor">
+                                            Tout
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card bg-dark">
+                                <div class="card-body corps">
+                                    <table class="table table-dark">
+                                        <thead id="tableHead">
+                                        </thead>
+                                        <tbody id="tableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" id="zoneBoss" style="display: none;">
+                            <div class="card bg-dark">
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col text-center">
+                                            <button id="btnSaveBoss" class="btn btn-success"
+                                                onclick="saveBoss()">Enregistrer</button>
+                                            <button id="btnNewBoss" class="btn btn-primary" onclick="newBoss()"
+                                                style="display: none;">Nouveau</button>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="alertPv" style="display: none;">
+                                        <div class="col">
+                                            <div class="alert alert-danger">
+                                                Les PV doivent être renseignés et > 0
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-auto">
+                                            PV
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="myInput" id="inputPvBoss" onkeydown="testEnter(event, true)">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-3">
+                                        <div class="col-md-auto">
+                                            Armure
+                                        </div>
+                                        <div class="col">
+                                            <select class="myInput" id="selectBossArmor">
+                                                <option value="plate">Plate</option>
+                                                <option value="cuirrasse">Cuirrasse</option>
+                                                <option value="ecaille">Ecaille</option>
+                                                <option value="maille">Maille</option>
+                                                <option value="cuirR">Cuir Rigide</option>
+                                                <option value="cuirS">Cuir Souple</option>
+                                                <option value="sa">Sans Armure</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div id="chat">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="dataBinding.js"></script>
+<script src="script.js"></script>
