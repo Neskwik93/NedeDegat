@@ -1,0 +1,51 @@
+.globalContent {
+    margin: 30px;
+    color: white;
+}
+
+/* Firefox */
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Chrome */
+
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.myInput {
+    width: 100%;
+    background-color: #343a40;
+    border: none;
+    border-bottom: 1px white solid;
+    color: white;
+}
+
+.myInput:focus {
+    outline: none;
+}
+
+.myInput:disabled {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-bottom: none;
+}
+
+.corps {
+    max-height: 600px;
+    overflow: auto;
+}
+
+#chat {
+    max-height: 305px;
+    overflow: auto;
+    color: black;
+}
+
+#displayNbRelance {
+    font-size: 20px;
+    color: red;
+}
