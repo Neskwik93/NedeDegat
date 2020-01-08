@@ -5,10 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
+import { AffichageBossComponent } from './affichage-boss/affichage-boss.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AffichageBossComponent
   ],
   imports: [
     BrowserModule,

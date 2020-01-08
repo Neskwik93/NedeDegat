@@ -1,0 +1,68 @@
+<div class="card bg-dark">
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col text-center">
+                <button class="btn btn-success" (click)="saveBoss()">Enregistrer</button>
+                <button class="btn btn-primary" (click)="newBoss()" style="display: none;">Nouveau</button>
+            </div>
+        </div>
+        <div class="row" id="alertPv" style="display: none;">
+            <div class="col">
+                <div class="alert alert-danger">
+                    Les PV doivent être renseignés et > 0
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3" id="containerinputDegatImmediat" style="display: none;">
+            <div class="col-md-auto">
+                Dégats immédiats
+            </div>
+            <div class="col">
+                <input type="number" class="myInput" id="inputDegatImmediat" [(ngModel)]=""
+                    (keydown)="testEnter($event, 'degatImmediat')">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-auto">
+                PV
+            </div>
+            <div class="col">
+                <input type="number" class="myInput" id="inputPvBoss" (keydown)="testEnter($event, 'saveBoss')">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-auto">
+                BD
+            </div>
+            <div class="col">
+                <input type="number" class="myInput" id="inputBdBoss" (keydown)="testEnter($event, 'saveBoss')">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-auto">
+                Armure
+            </div>
+            <div class="col">
+                <select class="myInput" id="selectBossArmor">
+                    <option value="plate">Plate</option>
+                    <option value="cuirrasse">Cuirrasse</option>
+                    <option value="ecaille">Ecaille</option>
+                    <option value="maille">Maille</option>
+                    <option value="cuirR">Cuir Rigide</option>
+                    <option value="cuirS">Cuir Souple</option>
+                    <option value="sa">Sans Armure</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chat">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
