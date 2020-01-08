@@ -2,23 +2,23 @@
     <div class="card-body">
         <div class="row mb-2">
             <div class="col text-center">
-                <button class="btn btn-success" (click)="saveBoss()">Enregistrer</button>
-                <button class="btn btn-primary" (click)="newBoss()" style="display: none;">Nouveau</button>
+                <button class="btn btn-success" *ngIf="!bossExist" (click)="saveBoss()">Enregistrer</button>
+                <button class="btn btn-primary" *ngIf="bossExist" (click)="newBoss()">Nouveau</button>
             </div>
         </div>
-        <div class="row" id="alertPv" style="display: none;">
+        <div class="row" *ngIf="alertPv">
             <div class="col">
                 <div class="alert alert-danger">
                     Les PV doivent être renseignés et > 0
                 </div>
             </div>
         </div>
-        <div class="row mb-3" id="containerinputDegatImmediat" style="display: none;">
+        <div class="row mb-3" *ngIf="bossExist">
             <div class="col-md-auto">
                 Dégats immédiats
             </div>
             <div class="col">
-                <input type="number" class="myInput" id="inputDegatImmediat" [(ngModel)]=""
+                <input type="number" class="myInput" [(ngModel)]="degatToApply"
                     (keydown)="testEnter($event, 'degatImmediat')">
             </div>
         </div>
@@ -27,7 +27,9 @@
                 PV
             </div>
             <div class="col">
-                <input type="number" class="myInput" id="inputPvBoss" (keydown)="testEnter($event, 'saveBoss')">
+                <input *ngIf="!bossExist" type="number" class="myInput" [(ngModel)]="boss.pv"
+                    (keydown)="testEnter($event, 'saveBoss')">
+                <span *ngIf="bossExist">{{boss.pv}}</span>
             </div>
         </div>
         <div class="row mb-3">
@@ -35,7 +37,9 @@
                 BD
             </div>
             <div class="col">
-                <input type="number" class="myInput" id="inputBdBoss" (keydown)="testEnter($event, 'saveBoss')">
+                <input *ngIf="!bossExist" type="number" class="myInput" [(ngModel)]="boss.bd"
+                    (keydown)="testEnter($event, 'saveBoss')">
+                <span *ngIf="bossExist">{{boss.bd}}</span>
             </div>
         </div>
         <div class="row mb-3">
@@ -43,7 +47,7 @@
                 Armure
             </div>
             <div class="col">
-                <select class="myInput" id="selectBossArmor">
+                <select *ngIf="!bossExist" class="myInput" [(ngModel)]="boss.armure">
                     <option value="plate">Plate</option>
                     <option value="cuirrasse">Cuirrasse</option>
                     <option value="ecaille">Ecaille</option>
@@ -52,6 +56,8 @@
                     <option value="cuirS">Cuir Souple</option>
                     <option value="sa">Sans Armure</option>
                 </select>
+                <span *ngIf="bossExist">{{(ttSalle | filter: {id_salle: (convocation.salle_id)}:{col : <!-- TODO: créer tableau d'armure pour le filtre -->
+                    'nom'})}}</span>
             </div>
         </div>
         <div class="row mt-2">

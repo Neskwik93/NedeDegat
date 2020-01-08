@@ -10,31 +10,32 @@
                                     <label for="inputDe">Valeur du dé</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input id="inputDe" (input)="checkApplyToBoss()" class="myInput inputDe"
-                                        type="number" (keydown)="testEnter($event, 'inputDe')">
+                                    <input id="inputDe" [(ngModel)]="valueDe" class="myInput inputDe" type="number"
+                                        (keydown)="testEnter($event, 'inputDe')">
                                 </div>
                                 <div class="col-md-auto">
                                     <button class="btn btn-primary" (click)="lancer()">Lancer</button>
                                 </div>
-                                <div class="col-md-auto" id="btnApplyToBoss" style="display: none;">
-                                    <button class="btn btn-danger" (click)="applyToBoss()">Appliquer au boss</button>
+                                <div class="col-md-auto"
+                                    *ngIf="ttArmeInTable.length === 1 && affichageBossComponent && affichageBossComponent.bossExist && valueDe">
+                                    <button class="btn btn-danger" (click)="affichageBossComponent.applyToBoss(valueDe)">Appliquer au boss</button>
                                 </div>
                                 <div class="col text-right">
                                     <button class="btn btn-danger" id="btnSwitchMod" (click)="switchBossMod()">
-                                        Mode BOSS
+                                        {{mode.libelleBtn}}
                                     </button>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col" id="displayNbRelance" style="display: none;">
-                                    coucou
+                                <div class="col" *ngIf="affichageBossComponent && affichageBossComponent.nbRelance > 0">
+                                    {{affichageBossComponent.nbRelance}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchTranchante"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchTranchante" id="switchTranchante" (change)="lancer()">
                                         <label class="custom-control-label" for="switchTranchante">
                                             Tranchantes à 1 main
                                         </label>
@@ -42,8 +43,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchContondante"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchContondante" id="switchContondante" (change)="lancer()">
                                         <label class="custom-control-label" for="switchContondante">
                                             Contondante
                                         </label>
@@ -51,8 +52,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch2Mains"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switch2Mains"
+                                            id="switch2Mains" (change)="lancer()">
                                         <label class="custom-control-label" for="switch2Mains">
                                             2 mains
                                         </label>
@@ -60,8 +61,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchPerfo"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPerfo"
+                                            id="switchPerfo" (change)="lancer()">
                                         <label class="custom-control-label" for="switchPerfo">
                                             Perforation
                                         </label>
@@ -69,8 +70,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchToutArme"
-                                            (click)="checkAllWeapon()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchToutArme"
+                                            id="switchToutArme" (change)="checkAllWeapon()">
                                         <label class="custom-control-label" for="switchToutArme">
                                             Tout
                                         </label>
@@ -80,8 +81,8 @@
                             <div class="row">
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchPlates"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPlates"
+                                            id="switchPlates" (change)="lancer()">
                                         <label class="custom-control-label" for="switchPlates">
                                             Plates
                                         </label>
@@ -89,8 +90,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchCuirasse"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchCuirasse"
+                                            id="switchCuirasse" (change)="lancer()">
                                         <label class="custom-control-label" for="switchCuirasse">
                                             Cuirasse
                                         </label>
@@ -98,8 +99,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchEcailles"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchEcailles"
+                                            id="switchEcailles" (change)="lancer()">
                                         <label class="custom-control-label" for="switchEcailles">
                                             Ecailles
                                         </label>
@@ -107,8 +108,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchMaille"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchMaille"
+                                            id="switchMaille" (change)="lancer()">
                                         <label class="custom-control-label" for="switchMaille">
                                             Maille
                                         </label>
@@ -116,8 +117,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchCuirRigide"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchCuirRigide" id="switchCuirRigide" (change)="lancer()">
                                         <label class="custom-control-label" for="switchCuirRigide">
                                             Cuir Rigide
                                         </label>
@@ -125,8 +126,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchCuirSouple"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchCuirSouple" id="switchCuirSouple" (change)="lancer()">
                                         <label class="custom-control-label" for="switchCuirSouple">
                                             Cuir Souple
                                         </label>
@@ -134,8 +135,8 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchSansArmure"
-                                            (click)="lancer()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchSansArmure" id="switchSansArmure" (change)="lancer()">
                                         <label class="custom-control-label" for="switchSansArmure">
                                             Sans Armure
                                         </label>
@@ -143,8 +144,9 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switchToutArmor"
-                                            (click)="checkAllArmor()" checked>
+                                        <input type="checkbox" class="custom-control-input"
+                                            [(ngModel)]="switchToutArmor" id="switchToutArmor"
+                                            (change)="checkAllArmor()">
                                         <label class="custom-control-label" for="switchToutArmor">
                                             Tout
                                         </label>
@@ -154,16 +156,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="zoneClassique">
+                <div class="card-body" id="zoneClassique" *ngIf="mode.value === 'c'">
                     <div class="row">
                         <!-- TABLE DEGATS -->
                         <div class="col">
                             <div class="card bg-dark">
                                 <div class="card-body corps">
                                     <table class="table table-dark">
-                                        <thead id="tableHead">
+                                        <thead [innerHTML]="tableHead">
                                         </thead>
-                                        <tbody id="tableBody">
+                                        <tbody [innerHTML]="tableBody">
                                         </tbody>
                                     </table>
                                 </div>
@@ -171,11 +173,11 @@
                         </div>
                         <!-- FIN TABLE DEGATS -->
                         <div class="col-md-3">
-                            <app-affichage-boss></app-affichage-boss>
+                            <app-affichage-boss [ttArmeInTable]="ttArmeInTable"></app-affichage-boss>
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="zoneBoss" style="display: none;">
+                <div class="card-body" id="zoneBoss" *ngIf="mode.value === 'b'">
 
                 </div>
             </div>
