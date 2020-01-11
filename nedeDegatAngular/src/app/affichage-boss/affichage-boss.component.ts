@@ -12,10 +12,10 @@ import * as global from '../../assets/data/global';
 export class AffichageBossComponent implements OnInit {
     @Input() ttArmeInTable;
     @Input() boss: Boss;
+    @Input() modeBoss: boolean;
     @Output() addInChat = new EventEmitter<string>();
 
     ttArmure = global.ttArmure;
-    bossExist: boolean = false;
     alertPv: boolean = false;
     nbBoss: number = 1;
     nbRelance: number = 0;
@@ -24,7 +24,6 @@ export class AffichageBossComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        this.bossExist = this.boss.saved;
     }
 
     testEnter(event, type) {
@@ -42,10 +41,13 @@ export class AffichageBossComponent implements OnInit {
 
     saveBoss() {
         if (this.boss.pv && this.boss.pv > 0) {
+            if(!this.boss.name) {
+                this.boss.name = 'Boss';
+            }
             this.alertPv = false;
-            this.bossExist = true;
             this.boss.saved = true;
             if (!this.boss.bd) this.boss.bd = 0;
+            this.addInChat.emit('<strong>' + this.boss.name + '</strong> débarque sur le champ de bataille !');
         } else {
             this.alertPv = true;
         }
@@ -53,7 +55,6 @@ export class AffichageBossComponent implements OnInit {
 
     newBoss() {
         this.nbBoss++;
-        this.bossExist = false;
         this.boss.saved = false;
     }
 
@@ -99,5 +100,4 @@ export class AffichageBossComponent implements OnInit {
         strToReturn += '<br>';
         this.addInChat.emit(strToReturn);
     }
-
 }

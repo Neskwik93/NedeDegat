@@ -1,11 +1,5 @@
 <div class="card bg-dark">
     <div class="card-body">
-        <div class="row mb-2">
-            <div class="col text-center">
-                <button class="btn btn-success" *ngIf="!bossExist" (click)="saveBoss()">Enregistrer</button>
-                <button class="btn btn-primary" *ngIf="bossExist" (click)="newBoss()">Nouveau</button>
-            </div>
-        </div>
         <div class="row" *ngIf="alertPv">
             <div class="col">
                 <div class="alert alert-danger">
@@ -13,7 +7,16 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3" *ngIf="bossExist">
+        <div class="row mb-3">
+            <div class="col-md-3" *ngIf="!boss.saved">
+                Nom
+            </div>
+            <div class="col text-center">
+                <input *ngIf="!boss.saved" type="text" class="myInput" [(ngModel)]="boss.name">
+                <h1 *ngIf="boss.saved" class="bossName">{{boss.name}}</h1>
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="boss.saved">
             <div class="col-md-auto">
                 Dégats immédiats
             </div>
@@ -23,31 +26,31 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-auto">
+            <div class="col-md-3">
                 PV
             </div>
             <div class="col">
-                <input *ngIf="!bossExist" type="number" class="myInput" [(ngModel)]="boss.pv"
+                <input *ngIf="!boss.saved" type="number" class="myInput" [(ngModel)]="boss.pv"
                     (keydown)="testEnter($event, 'saveBoss')">
-                <span *ngIf="bossExist">{{boss.pv}}</span>
+                <span *ngIf="boss.saved">{{boss.pv}}</span>
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-auto">
+            <div class="col-md-3">
                 BD
             </div>
             <div class="col">
-                <input *ngIf="!bossExist" type="number" class="myInput" [(ngModel)]="boss.bd"
+                <input *ngIf="!boss.saved" type="number" class="myInput" [(ngModel)]="boss.bd"
                     (keydown)="testEnter($event, 'saveBoss')">
-                <span *ngIf="bossExist">{{boss.bd}}</span>
+                <span *ngIf="boss.saved">{{boss.bd}}</span>
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-auto">
+            <div class="col-md-3">
                 Armure
             </div>
             <div class="col">
-                <select *ngIf="!bossExist" class="myInput" [(ngModel)]="boss.armure">
+                <select *ngIf="!boss.saved" class="myInput" [(ngModel)]="boss.armure">
                     <option value="plate">Plate</option>
                     <option value="cuirrasse">Cuirrasse</option>
                     <option value="ecaille">Ecaille</option>
@@ -56,7 +59,13 @@
                     <option value="cuirS">Cuir Souple</option>
                     <option value="sa">Sans Armure</option>
                 </select>
-                <span *ngIf="bossExist">{{(ttArmure | filter: {value: (boss.armure)}:{col : 'libelle'})}}</span>
+                <span *ngIf="boss.saved">{{(ttArmure | filter: {value: (boss.armure)}:{col : 'libelle'})}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <button class="btn btn-success" *ngIf="!boss.saved" (click)="saveBoss()">Enregistrer</button>
+                <button class="btn btn-primary" *ngIf="boss.saved" (click)="newBoss()">Nouveau</button>
             </div>
         </div>
     </div>

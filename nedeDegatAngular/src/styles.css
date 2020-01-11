@@ -49,3 +49,19 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
     font-size: 20px;
     color: red;
 }
+
+.bossName {
+    color: #ff00009c;
+    font-family: time new roman;
+    margin-bottom: 0;
+}
+
+.iconButton {
+    background-color: #f0f8ff00;
+    border: none;
+    color: white;
+}
+
+.iconButton:focus {
+    outline: none;
+}

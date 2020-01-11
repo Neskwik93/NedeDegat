@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
     ttBoss: Boss[] = [];
     strChat: string = '';
     htmlElementChat: HTMLElement;
+    nbRound: number = 1;
 
     constructor() { }
 
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit {
         this.initChat();
     }
 
-    lancer() {
+    lancer(event = null) {
         this.ttArmeInTable = [];
         this.generateHeader();
         this.tableBody = '';
@@ -73,6 +74,7 @@ export class AppComponent implements OnInit {
             this.generateTable(global.ttPerforation, 'Perforations');
             this.ttArmeInTable.push('ttPerforation');
         }
+        console.log(event) //TODO: faire en sorte que quand on est en mode boss si on change d'arme ça décoche l'autre arme
     }
 
     testEnter(event, type) {
@@ -173,11 +175,21 @@ export class AppComponent implements OnInit {
 
     switchBossMod() {
         this.mode = this.mode.value === 'c' ? { value: 'b', libelleBtn: 'Mode classique' } : { value: 'c', libelleBtn: 'Mode BOSS' };
+        this.initSwitchs();
         this.initChat()
     }
 
+    initSwitchs() {
+        this.ttArmeInTable = [];
+        this.ttArmeInTable.push('ttTranchante');
+        this.switchTranchante = true;
+        this.switchContondante = false;
+        this.switch2Mains = false;
+        this.switchPerfo = false;
+    }
+
     addBoss() {
-        this.ttBoss.push({ name: 'oui', pv: 200, bd: 50, armure: 'sa', saved: false })
+        this.ttBoss.push({ name: '', pv: 600, bd: 50, armure: 'sa', saved: false });
     }
 
     initChat() {
@@ -189,6 +201,11 @@ export class AppComponent implements OnInit {
         this.strChat += str;
         this.htmlElementChat.innerHTML = this.strChat;
         this.htmlElementChat.scrollTop = this.htmlElementChat.scrollHeight;
+    }
+
+    deleteBoss(boss: Boss) {
+        let id = this.ttBoss.indexOf(boss);
+        this.ttBoss.splice(id, 1);
     }
 }
 

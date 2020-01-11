@@ -14,13 +14,25 @@
                                         (keydown)="testEnter($event, 'inputDe')">
                                 </div>
                                 <div class="col-md-auto">
-                                    <button class="btn btn-primary" (click)="lancer()">Lancer</button>
+                                    <button class="iconButton" (click)="lancer()" title="Lancer">
+                                        <i class="fas fa-dice fa-2x"></i>
+                                    </button>
                                 </div>
                                 <div class="col-md-auto"
-                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.bossExist && valueDe">
+                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.boss.saved && valueDe">
                                     <button class="btn btn-danger"
                                         (click)="affichageBossComponent.applyToBoss(valueDe)">Appliquer au boss</button>
                                 </div>
+                                <ng-container *ngIf="mode.value === 'b'">
+                                    <div class="col-md-auto offset-1" style="font-size: 1.5rem;">
+                                        Round <span style="color: red;">{{nbRound}}</span>
+                                    </div>
+                                    <div class="col-md-auto" *ngIf="ttBoss.length > 0">
+                                        <button class="iconButton" title="Round suivant">
+                                            <i class="fas fa-forward fa-2x"></i>
+                                        </button>
+                                    </div>
+                                </ng-container>
                                 <div class="col text-right">
                                     <button class="btn btn-danger" id="btnSwitchMod" (click)="switchBossMod()">
                                         {{mode.libelleBtn}}
@@ -37,7 +49,7 @@
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchTranchante" id="switchTranchante" (change)="lancer()">
+                                            [(ngModel)]="switchTranchante" id="switchTranchante" (change)="lancer($event)">
                                         <label class="custom-control-label" for="switchTranchante">
                                             Tranchantes à 1 main
                                         </label>
@@ -46,7 +58,7 @@
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchContondante" id="switchContondante" (change)="lancer()">
+                                            [(ngModel)]="switchContondante" id="switchContondante" (change)="lancer($event)">
                                         <label class="custom-control-label" for="switchContondante">
                                             Contondante
                                         </label>
@@ -55,7 +67,7 @@
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" [(ngModel)]="switch2Mains"
-                                            id="switch2Mains" (change)="lancer()">
+                                            id="switch2Mains" (change)="lancer($event)">
                                         <label class="custom-control-label" for="switch2Mains">
                                             2 mains
                                         </label>
@@ -64,13 +76,13 @@
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPerfo"
-                                            id="switchPerfo" (change)="lancer()">
+                                            id="switchPerfo" (change)="lancer($event)">
                                         <label class="custom-control-label" for="switchPerfo">
                                             Perforation
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-auto">
+                                <div class="col-md-auto" *ngIf="mode.value === 'c'">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" [(ngModel)]="switchToutArme"
                                             id="switchToutArme" (change)="checkAllWeapon()">
@@ -80,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" *ngIf="mode.value === 'c'">
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPlates"
@@ -173,14 +185,18 @@
                                 <div class="card-body corps" id="zoneBoss" *ngIf="mode.value === 'b'">
                                     <div class="row">
                                         <div class="col-md-auto">
-                                            <button class="btn btn-primary" (click)="addBoss()">Ajouter un Boss</button>
+                                            <button class="iconButton" (click)="addBoss()" title="Ajouter un Boss">
+                                                <i class="fas fa-plus-circle fa-2x"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <div class="col">
                                             <div class="row">
                                                 <div class="col-md-4" *ngFor="let b of ttBoss">
-                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b" (addInChat)="updateChat($event)">
+                                                    <button class="iconButton" *ngIf="!b.saved" title="supprimer" (click)="deleteBoss(b)"><i class="fas fa-trash-alt"></i></button>
+                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b" [modeBoss]="mode.value === 'b'"
+                                                        (addInChat)="updateChat($event)">
                                                     </app-affichage-boss>
                                                 </div>
                                             </div>
@@ -192,7 +208,7 @@
                         <div class="col-md-3">
                             <div class="row" *ngIf="mode.value === 'c'">
                                 <div class="col">
-                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss"
+                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss" [modeBoss]="mode.value === 'b'"
                                         (addInChat)="updateChat($event)">
                                     </app-affichage-boss>
                                 </div>
