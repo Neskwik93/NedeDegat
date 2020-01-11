@@ -17,8 +17,9 @@
                                     <button class="btn btn-primary" (click)="lancer()">Lancer</button>
                                 </div>
                                 <div class="col-md-auto"
-                                    *ngIf="ttArmeInTable.length === 1 && affichageBossComponent && affichageBossComponent.bossExist && valueDe">
-                                    <button class="btn btn-danger" (click)="affichageBossComponent.applyToBoss(valueDe)">Appliquer au boss</button>
+                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.bossExist && valueDe">
+                                    <button class="btn btn-danger"
+                                        (click)="affichageBossComponent.applyToBoss(valueDe)">Appliquer au boss</button>
                                 </div>
                                 <div class="col text-right">
                                     <button class="btn btn-danger" id="btnSwitchMod" (click)="switchBossMod()">
@@ -27,7 +28,8 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col" *ngIf="affichageBossComponent && affichageBossComponent.nbRelance > 0">
+                                <div class="col"
+                                    *ngIf="mode.value === 'c' && affichageBossComponent && affichageBossComponent.nbRelance > 0">
                                     {{affichageBossComponent.nbRelance}}
                                 </div>
                             </div>
@@ -156,12 +158,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="zoneClassique" *ngIf="mode.value === 'c'">
+                <div class="card-body">
                     <div class="row">
-                        <!-- TABLE DEGATS -->
                         <div class="col">
                             <div class="card bg-dark">
-                                <div class="card-body corps">
+                                <div class="card-body corps" id="zoneClassique" *ngIf="mode.value === 'c'">
                                     <table class="table table-dark">
                                         <thead [innerHTML]="tableHead">
                                         </thead>
@@ -169,16 +170,45 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="card-body corps" id="zoneBoss" *ngIf="mode.value === 'b'">
+                                    <div class="row">
+                                        <div class="col-md-auto">
+                                            <button class="btn btn-primary" (click)="addBoss()">Ajouter un Boss</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col-md-4" *ngFor="let b of ttBoss">
+                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b" (addInChat)="updateChat($event)">
+                                                    </app-affichage-boss>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- FIN TABLE DEGATS -->
                         <div class="col-md-3">
-                            <app-affichage-boss [ttArmeInTable]="ttArmeInTable"></app-affichage-boss>
+                            <div class="row" *ngIf="mode.value === 'c'">
+                                <div class="col">
+                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss"
+                                        (addInChat)="updateChat($event)">
+                                    </app-affichage-boss>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="chat">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body" id="zoneBoss" *ngIf="mode.value === 'b'">
-
                 </div>
             </div>
         </div>

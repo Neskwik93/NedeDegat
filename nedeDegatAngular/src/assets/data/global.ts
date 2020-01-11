@@ -1,4 +1,6 @@
-export const ttTranchante: any[] = [
+import { LigneDegat } from 'src/app/model/app.model';
+
+export const ttTranchante: LigneDegat[] = [
     { min: 36, max: 40, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 41, max: 45, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 46, max: 50, plate: 1, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
@@ -48,7 +50,7 @@ export const ttContondante: any[] = [
     { min: 141, max: 145, plate: '16D', cuirrasse: '15E', ecaille: '19E', maille: '21E', cuirR: '19E', cuirS: '19E', sa: '22E' },
     { min: 146, max: 150, plate: '16E', cuirrasse: '16E', ecaille: '20E', maille: '22E', cuirR: '20E', cuirS: '20E', sa: '23E' },
 ];
-export const tt2main: any[] = [
+export const tt2main: LigneDegat[] = [
     { min: 36, max: 40, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 41, max: 45, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 46, max: 50, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
@@ -73,7 +75,7 @@ export const tt2main: any[] = [
     { min: 141, max: 145, plate: '21E', cuirrasse: '19E', ecaille: '29E', maille: '31E', cuirR: '37E', cuirS: '40E', sa: '45E' },
     { min: 146, max: 150, plate: '22E', cuirrasse: '20E', ecaille: '31E', maille: '33E', cuirR: '40E', cuirS: '43E', sa: '48E' },
 ];
-export const ttPerforation: any = [
+export const ttPerforation: LigneDegat[] = [
     { min: 36, max: 40, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 41, max: 45, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 46, max: 50, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
@@ -98,7 +100,7 @@ export const ttPerforation: any = [
     { min: 141, max: 145, plate: '14D', cuirrasse: '12D', ecaille: '21E', maille: '23E', cuirR: '25E', cuirS: '24E', sa: '25E' },
     { min: 146, max: 150, plate: '15E', cuirrasse: '13E', ecaille: '23E', maille: '25E', cuirR: '26E', cuirS: '26E', sa: '27E' },
 ];
-export const ttSortEclair: any = [
+export const ttSortEclair: LigneDegat[] = [
     { min: 36, max: 40, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 41, max: 45, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 46, max: 50, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
@@ -123,7 +125,7 @@ export const ttSortEclair: any = [
     { min: 141, max: 145, plate: '14D', cuirrasse: '12D', ecaille: '21E', maille: '23E', cuirR: '25E', cuirS: '24E', sa: '25E' },
     { min: 146, max: 150, plate: '15E', cuirrasse: '13E', ecaille: '23E', maille: '25E', cuirR: '26E', cuirS: '26E', sa: '27E' },
 ];
-export const ttSortBoule: any[] = [
+export const ttSortBoule: LigneDegat[] = [
     { min: 36, max: 40, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 41, max: 45, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
     { min: 46, max: 50, plate: 0, cuirrasse: 0, ecaille: 0, maille: 0, cuirR: 0, cuirS: 0, sa: 0 },
@@ -147,4 +149,13 @@ export const ttSortBoule: any[] = [
     { min: 136, max: 140, plate: '13C', cuirrasse: '11D', ecaille: '20D', maille: '22D', cuirR: '23D', cuirS: '23E', sa: '23E' },
     { min: 141, max: 145, plate: '14D', cuirrasse: '12D', ecaille: '21E', maille: '23E', cuirR: '25E', cuirS: '24E', sa: '25E' },
     { min: 146, max: 150, plate: '15E', cuirrasse: '13E', ecaille: '23E', maille: '25E', cuirR: '26E', cuirS: '26E', sa: '27E' },
+];
+export const ttArmure: any[] = [
+    { value: 'plate', libelle: 'Plate' },
+    { value: 'cuirrasse', libelle: 'Cuirrasse' },
+    { value: 'ecaille', libelle: 'Ecaille' },
+    { value: 'maille', libelle: 'Maille' },
+    { value: 'cuirR', libelle: 'Cuir Rigide' },
+    { value: 'cuirS', libelle: 'Cuir Souple' },
+    { value: 'sa', libelle: 'Sans Armure' },
 ];

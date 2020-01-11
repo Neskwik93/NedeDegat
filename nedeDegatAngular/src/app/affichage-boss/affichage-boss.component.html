@@ -56,18 +56,7 @@
                     <option value="cuirS">Cuir Souple</option>
                     <option value="sa">Sans Armure</option>
                 </select>
-                <span *ngIf="bossExist">{{(ttSalle | filter: {id_salle: (convocation.salle_id)}:{col : <!-- TODO: créer tableau d'armure pour le filtre -->
-                    'nom'})}}</span>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="chat">
-                        </div>
-                    </div>
-                </div>
+                <span *ngIf="bossExist">{{(ttArmure | filter: {value: (boss.armure)}:{col : 'libelle'})}}</span>
             </div>
         </div>
     </div>

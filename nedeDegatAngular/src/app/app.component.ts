@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { AffichageBossComponent } from './affichage-boss/affichage-boss.component';
+
+import { Boss } from './model/app.model';
 
 import * as global from '../assets/data/global';
 
@@ -9,8 +11,8 @@ import * as global from '../assets/data/global';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-    @ViewChild(AffichageBossComponent, {static: false}) affichageBossComponent: AffichageBossComponent;
+export class AppComponent implements OnInit {
+    @ViewChild(AffichageBossComponent, { static: false }) affichageBossComponent: AffichageBossComponent;
 
     valueDe: any;
     mode: any = {
@@ -34,11 +36,12 @@ export class AppComponent {
     switchSansArmure: boolean = true;
     switchToutArmor: boolean = true;
 
-    zoneClassique: any;
-    zoneBoss: any;
-
-    ttValInTable: any[] = [];
-    ttArmeInTable: any[] = [];
+    ttValInTable: string[] = [];
+    ttArmeInTable: string[] = [];
+    boss: Boss = { name: 'boss', armure: 'plate', pv: 0, bd: 0, saved: false };
+    ttBoss: Boss[] = [];
+    strChat: string = '';
+    htmlElementChat: HTMLElement;
 
     constructor() { }
 
@@ -46,8 +49,11 @@ export class AppComponent {
         this.lancer();
     }
 
+    ngAfterViewInit() {
+        this.initChat();
+    }
+
     lancer() {
-        console.log(this.affichageBossComponent)
         this.ttArmeInTable = [];
         this.generateHeader();
         this.tableBody = '';
@@ -69,7 +75,7 @@ export class AppComponent {
         }
     }
 
-    testEnter = (event, type) => {
+    testEnter(event, type) {
         if (event.key === 'Enter') {
             switch (type) {
                 case 'inputDe':
@@ -79,7 +85,7 @@ export class AppComponent {
         }
     }
 
-    generateHeader = () => {
+    generateHeader() {
         this.ttValInTable = [];
         this.tableHead = '';
         let str = '<tr class="text-center"><th scope="col">Jet</th>';
@@ -115,7 +121,7 @@ export class AppComponent {
         this.tableHead = str;
     }
 
-    generateTable = (ttValue, titre) => {
+    generateTable(ttValue, titre) {
         let valueUsed;
         if (this.valueDe && this.valueDe > 150) {
             valueUsed = 150;
@@ -146,7 +152,7 @@ export class AppComponent {
         this.tableBody += str;
     }
 
-    checkAllWeapon = () => {
+    checkAllWeapon() {
         this.switchTranchante = this.switchToutArme;
         this.switchContondante = this.switchToutArme;
         this.switch2Mains = this.switchToutArme;
@@ -154,7 +160,7 @@ export class AppComponent {
         this.lancer();
     }
 
-    checkAllArmor = () => {
+    checkAllArmor() {
         this.switchPlates = this.switchToutArmor;
         this.switchCuirasse = this.switchToutArmor;
         this.switchEcailles = this.switchToutArmor;
@@ -165,8 +171,24 @@ export class AppComponent {
         this.lancer();
     }
 
-    switchBossMod = () => {
+    switchBossMod() {
         this.mode = this.mode.value === 'c' ? { value: 'b', libelleBtn: 'Mode classique' } : { value: 'c', libelleBtn: 'Mode BOSS' };
+        this.initChat()
+    }
+
+    addBoss() {
+        this.ttBoss.push({ name: 'oui', pv: 200, bd: 50, armure: 'sa', saved: false })
+    }
+
+    initChat() {
+        this.htmlElementChat = document.getElementById('chat');
+        this.updateChat();
+    }
+
+    updateChat(str = '') {
+        this.strChat += str;
+        this.htmlElementChat.innerHTML = this.strChat;
+        this.htmlElementChat.scrollTop = this.htmlElementChat.scrollHeight;
     }
 }
 

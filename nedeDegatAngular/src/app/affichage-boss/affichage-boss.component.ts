@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+import { Boss } from '../model/app.model';
 
 import * as global from '../../assets/data/global';
 
@@ -9,11 +11,12 @@ import * as global from '../../assets/data/global';
 })
 export class AffichageBossComponent implements OnInit {
     @Input() ttArmeInTable;
+    @Input() boss: Boss;
+    @Output() addInChat = new EventEmitter<string>();
 
-    boss: any = { pv: null, bd: null, armure: 'plate' };
+    ttArmure = global.ttArmure;
     bossExist: boolean = false;
     alertPv: boolean = false;
-    chat: HTMLElement;
     nbBoss: number = 1;
     nbRelance: number = 0;
     degatToApply: number;
@@ -21,13 +24,10 @@ export class AffichageBossComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        this.bossExist = this.boss.saved;
     }
 
-    ngAfterViewInit() {
-        this.chat = document.getElementById('chat')
-    }
-
-    testEnter = (event, type) => {
+    testEnter(event, type) {
         if (event.key === 'Enter') {
             switch (type) {
                 case 'degatImmediat':
@@ -40,25 +40,24 @@ export class AffichageBossComponent implements OnInit {
         }
     }
 
-    saveBoss = () => {
+    saveBoss() {
         if (this.boss.pv && this.boss.pv > 0) {
-            console.log('"oui')
             this.alertPv = false;
             this.bossExist = true;
+            this.boss.saved = true;
             if (!this.boss.bd) this.boss.bd = 0;
         } else {
             this.alertPv = true;
         }
     }
 
-    newBoss = () => {
+    newBoss() {
         this.nbBoss++;
-        this.boss = null;
         this.bossExist = false;
-        this.boss = { pv: 0, bd: 0, armure: 'plate' };
+        this.boss.saved = false;
     }
 
-    applyToBoss = (deValue) => {
+    applyToBoss(deValue) {
         this.nbRelance = 0;
         let valueUsed = deValue;
         let reste = 0;
@@ -74,7 +73,6 @@ export class AffichageBossComponent implements OnInit {
         }
         let val = global[this.ttArmeInTable[0]].find(degat => valueUsed >= degat.min && valueUsed <= degat.max);
         let degat = val[this.boss.armure];
-        console.log(degat)
         let critique;
         if (typeof degat === 'string') {
             critique = degat[degat.length - 1];
@@ -83,22 +81,23 @@ export class AffichageBossComponent implements OnInit {
         this.applyDegat(degat, critique);
     }
 
-    applyDegat = (degat, critique = null) => {
+    applyDegat(degat, critique = null) {
+        let strToReturn = '';
         if (this.boss.pv > 0) {
             this.boss.pv -= degat;
             if (this.boss.pv <= 0) {
                 this.boss.pv = 0;
-                this.chat.innerHTML += '<strong>Boss ' + this.nbBoss + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche ';
-                this.chat.innerHTML += '<strong><span style="color: red">IL EST MORT SA RACE !</span></strong>';
+                strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche ';
+                strToReturn += '<strong><span style="color: red">IL EST MORT SA RACE !</span></strong>';
             } else {
-                this.chat.innerHTML += '<strong>Boss ' + this.nbBoss + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche' + (critique ? ' et un <strong>critique ' + critique + '</strong> ' : ' ');
-                this.chat.innerHTML += 'il lui reste <span style="color: red">' + this.boss.pv + ' PV.</span>';
+                strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche' + (critique ? ' et un <strong>critique ' + critique + '</strong> ' : ' ');
+                strToReturn += 'il lui reste <span style="color: red">' + this.boss.pv + ' PV.</span>';
             }
         } else {
-            this.chat.innerHTML += '<strong>Boss ' + this.nbBoss + '</strong> est mort, fais en un nouveau';
+            strToReturn += '<strong>' + this.boss.name + '</strong> est mort, fais en un nouveau';
         }
-        this.chat.innerHTML += '<br>';
-        this.chat.scrollTop = this.chat.scrollHeight;
+        strToReturn += '<br>';
+        this.addInChat.emit(strToReturn);
     }
 
 }
