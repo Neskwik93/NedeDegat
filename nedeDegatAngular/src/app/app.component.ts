@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChildren, OnInit, OnDestroy, QueryList, ChangeDetectorRef } from '@angular/core';
 
 import { AffichageBossComponent } from './affichage-boss/affichage-boss.component';
 
@@ -11,12 +11,12 @@ import * as global from '../assets/data/global';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-    @ViewChild(AffichageBossComponent, { static: false }) affichageBossComponent: AffichageBossComponent;
+export class AppComponent implements OnInit, OnDestroy {
+    @ViewChildren(AffichageBossComponent) affichageBossComponent: QueryList<AffichageBossComponent>;
 
     valueDe: any;
     mode: any = {
-        value: 'c', libelleBtn: 'Mode BOSS'
+        value: 'c'
     };
     tableBody: string;
     tableHead: string;
@@ -43,8 +43,9 @@ export class AppComponent implements OnInit {
     strChat: string = '';
     htmlElementChat: HTMLElement;
     nbRound: number = 1;
+    nbRelance: number = 0;
 
-    constructor() { }
+    constructor(private _changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.lancer();
@@ -54,6 +55,10 @@ export class AppComponent implements OnInit {
         this.initChat();
     }
 
+    ngOnDestroy() {
+        this._changeDetectorRef.detach()
+    }
+
     lancer(event = null) {
         this.ttArmeInTable = [];
         this.generateHeader();
@@ -61,20 +66,36 @@ export class AppComponent implements OnInit {
         if (this.switchTranchante) {
             this.generateTable(global.ttTranchante, 'Tranchante à une main');
             this.ttArmeInTable.push('ttTranchante');
+            this.uncheckedSwitch(event, 'switchTranchante')
         }
         if (this.switchContondante) {
             this.generateTable(global.ttTranchante, 'Contondante à un main');
             this.ttArmeInTable.push('ttContondante');
+            this.uncheckedSwitch(event, 'switchContondante')
         }
         if (this.switch2Mains) {
             this.generateTable(global.tt2main, 'Arme à 2 mains');
             this.ttArmeInTable.push('tt2main');
+            this.uncheckedSwitch(event, 'switch2Mains')
         }
         if (this.switchPerfo) {
             this.generateTable(global.ttPerforation, 'Perforations');
             this.ttArmeInTable.push('ttPerforation');
+            this.uncheckedSwitch(event, 'switchPerfo')
         }
-        console.log(event) //TODO: faire en sorte que quand on est en mode boss si on change d'arme ça décoche l'autre arme
+
+    }
+
+    checkFirstComponent() {
+        this._changeDetectorRef.markForCheck();
+        return this.affichageBossComponent && this.affichageBossComponent.first
+    }
+
+    uncheckedSwitch(event, actual: string) {
+        if (event && this.mode.value === 'b' && event.target.id !== actual) {
+            this[actual] = false;
+            this.lancer();
+        }
     }
 
     testEnter(event, type) {
@@ -85,6 +106,10 @@ export class AppComponent implements OnInit {
                     break;
             }
         }
+    }
+
+    updateNbRelance(nbRelance) {
+        this.nbRelance = nbRelance;
     }
 
     generateHeader() {
@@ -174,7 +199,7 @@ export class AppComponent implements OnInit {
     }
 
     switchBossMod() {
-        this.mode = this.mode.value === 'c' ? { value: 'b', libelleBtn: 'Mode classique' } : { value: 'c', libelleBtn: 'Mode BOSS' };
+        this.mode.value = this.mode.value === 'c' ? 'b' : 'c';
         this.initSwitchs();
         this.initChat()
     }
@@ -189,7 +214,24 @@ export class AppComponent implements OnInit {
     }
 
     addBoss() {
-        this.ttBoss.push({ name: '', pv: 600, bd: 50, armure: 'sa', saved: false });
+        this.ttBoss.push({ name: '', pv: 0, bd: 0, armure: 'sa', saved: false });
+    }
+
+    applyToBoss(boss: Boss) {
+        if (this.valueDe) {
+            let bossComponent = this.affichageBossComponent.find(bc => bc.boss === boss);
+            bossComponent.applyToBoss(this.valueDe);
+        }
+    }
+
+    nextRound() {
+        this.nbRound++;
+        if(this.affichageBossComponent)
+        this.affichageBossComponent.forEach(bc => {
+            if(bc.degatParTour > 0 && bc.boss.saved) {
+                bc.applyDegat(bc.degatParTour);
+            }
+        });
     }
 
     initChat() {

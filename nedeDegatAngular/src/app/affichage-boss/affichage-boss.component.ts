@@ -14,11 +14,12 @@ export class AffichageBossComponent implements OnInit {
     @Input() boss: Boss;
     @Input() modeBoss: boolean;
     @Output() addInChat = new EventEmitter<string>();
+    @Output() setNbRelance = new EventEmitter<number>();
 
     ttArmure = global.ttArmure;
     alertPv: boolean = false;
-    nbBoss: number = 1;
     nbRelance: number = 0;
+    degatParTour: number;
     degatToApply: number;
 
     constructor() { }
@@ -41,20 +42,19 @@ export class AffichageBossComponent implements OnInit {
 
     saveBoss() {
         if (this.boss.pv && this.boss.pv > 0) {
-            if(!this.boss.name) {
+            if (!this.boss.name) {
                 this.boss.name = 'Boss';
             }
             this.alertPv = false;
             this.boss.saved = true;
             if (!this.boss.bd) this.boss.bd = 0;
-            this.addInChat.emit('<strong>' + this.boss.name + '</strong> débarque sur le champ de bataille !');
+            this.addInChat.emit('<strong>' + this.boss.name + '</strong> débarque sur le champ de bataille !<br>');
         } else {
             this.alertPv = true;
         }
     }
 
     newBoss() {
-        this.nbBoss++;
         this.boss.saved = false;
     }
 
@@ -72,6 +72,7 @@ export class AffichageBossComponent implements OnInit {
             }
             valueUsed = 150;
         }
+        this.setNbRelance.emit(this.nbRelance);
         let val = global[this.ttArmeInTable[0]].find(degat => valueUsed >= degat.min && valueUsed <= degat.max);
         let degat = val[this.boss.armure];
         let critique;

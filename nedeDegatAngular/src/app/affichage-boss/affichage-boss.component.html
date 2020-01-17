@@ -13,7 +13,7 @@
             </div>
             <div class="col text-center">
                 <input *ngIf="!boss.saved" type="text" class="myInput" [(ngModel)]="boss.name">
-                <h1 *ngIf="boss.saved" class="bossName">{{boss.name}}</h1>
+                <h5 *ngIf="boss.saved" class="bossName">{{boss.name}}</h5>
             </div>
         </div>
         <div class="row mb-3" *ngIf="boss.saved">
@@ -23,6 +23,14 @@
             <div class="col">
                 <input type="number" class="myInput" [(ngModel)]="degatToApply"
                     (keydown)="testEnter($event, 'degatImmediat')">
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="boss.saved">
+            <div class="col-md-auto">
+                Dégats par tour
+            </div>
+            <div class="col">
+                <input type="number" class="myInput" [(ngModel)]="degatParTour">
             </div>
         </div>
         <div class="row mb-3">

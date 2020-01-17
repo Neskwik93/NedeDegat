@@ -15,41 +15,49 @@
                                 </div>
                                 <div class="col-md-auto">
                                     <button class="iconButton" (click)="lancer()" title="Lancer">
-                                        <i class="fas fa-dice fa-2x"></i>
+                                        <i class="fas fa-dice-d20 fa-2x"></i>
                                     </button>
                                 </div>
                                 <div class="col-md-auto"
-                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.boss.saved && valueDe">
+                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.first && affichageBossComponent.first.boss.saved && valueDe">
                                     <button class="btn btn-danger"
-                                        (click)="affichageBossComponent.applyToBoss(valueDe)">Appliquer au boss</button>
+                                        (click)="affichageBossComponent.first.applyToBoss(valueDe)">Appliquer au
+                                        boss</button>
                                 </div>
                                 <ng-container *ngIf="mode.value === 'b'">
                                     <div class="col-md-auto offset-1" style="font-size: 1.5rem;">
                                         Round <span style="color: red;">{{nbRound}}</span>
                                     </div>
                                     <div class="col-md-auto" *ngIf="ttBoss.length > 0">
-                                        <button class="iconButton" title="Round suivant">
+                                        <button class="iconButton" title="Round suivant" (click)="nextRound()">
                                             <i class="fas fa-forward fa-2x"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-auto" *ngIf="nbRound > 1">
+                                        <button class="iconButton" title="Raz Round" (click)="nbRound = 1">
+                                            <i class="fas fa-undo fa-2x"></i>
                                         </button>
                                     </div>
                                 </ng-container>
                                 <div class="col text-right">
-                                    <button class="btn btn-danger" id="btnSwitchMod" (click)="switchBossMod()">
-                                        {{mode.libelleBtn}}
+                                    <button class="iconButton" id="btnSwitchMod" (click)="switchBossMod()"
+                                        title="Mode Boss">
+                                        <i class="fas fa-skull fa-2x"
+                                            [ngStyle]="{ 'color': mode.value === 'c' ? 'white' :'red' }"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col"
-                                    *ngIf="mode.value === 'c' && affichageBossComponent && affichageBossComponent.nbRelance > 0">
-                                    {{affichageBossComponent.nbRelance}}
+                                <div class="col" *ngIf="nbRelance > 0">
+                                    {{nbRelance}} Relance(s) sur critique disponnible(s)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchTranchante" id="switchTranchante" (change)="lancer($event)">
+                                            [(ngModel)]="switchTranchante" id="switchTranchante"
+                                            (change)="lancer($event)">
                                         <label class="custom-control-label" for="switchTranchante">
                                             Tranchantes à 1 main
                                         </label>
@@ -58,7 +66,8 @@
                                 <div class="col-md-auto">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchContondante" id="switchContondante" (change)="lancer($event)">
+                                            [(ngModel)]="switchContondante" id="switchContondante"
+                                            (change)="lancer($event)">
                                         <label class="custom-control-label" for="switchContondante">
                                             Contondante
                                         </label>
@@ -194,9 +203,19 @@
                                         <div class="col">
                                             <div class="row">
                                                 <div class="col-md-4" *ngFor="let b of ttBoss">
-                                                    <button class="iconButton" *ngIf="!b.saved" title="supprimer" (click)="deleteBoss(b)"><i class="fas fa-trash-alt"></i></button>
-                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b" [modeBoss]="mode.value === 'b'"
-                                                        (addInChat)="updateChat($event)">
+                                                    <button class="iconButton" *ngIf="!b.saved" title="supprimer"
+                                                        (click)="deleteBoss(b)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <ng-container *ngIf="b.saved">
+                                                        <button class="iconButton" (click)="applyToBoss(b)"
+                                                            title="Appliquer jet de dé">
+                                                            <i class="fas fa-fist-raised"></i>
+                                                        </button>
+                                                    </ng-container>
+                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b"
+                                                        [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
+                                                        (setNbRelance)="updateNbRelance($event)">
                                                     </app-affichage-boss>
                                                 </div>
                                             </div>
@@ -208,12 +227,18 @@
                         <div class="col-md-3">
                             <div class="row" *ngIf="mode.value === 'c'">
                                 <div class="col">
-                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss" [modeBoss]="mode.value === 'b'"
-                                        (addInChat)="updateChat($event)">
+                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss"
+                                        [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
+                                        (setNbRelance)="updateNbRelance($event)">
                                     </app-affichage-boss>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mt-2 mb-1">
+                                <div class="col">
+                                    <button class="btn btn-primary" (click)="strChat = ''; updateChat()">Clear</button>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
