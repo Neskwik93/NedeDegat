@@ -1,6 +1,8 @@
-.globalContent {
-    margin: 30px;
+#globalContent {
     color: white;
+    border: none!important;
+    border-radius: 0!important;
+    overflow: auto;
 }
 
 /* Firefox */
@@ -35,7 +37,7 @@ input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
 }
 
 .corps {
-    max-height: 600px;
+    min-height: 300px;
     overflow: auto;
 }
 

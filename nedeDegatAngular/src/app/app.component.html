@@ -1,251 +1,260 @@
-<div class="globalContent">
-    <div class="row">
-        <div class="col">
-            <div class="card bg-dark">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-md-auto">
-                                    <label for="inputDe">Valeur du dé</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <input id="inputDe" [(ngModel)]="valueDe" class="myInput inputDe" type="number"
-                                        (keydown)="testEnter($event, 'inputDe')">
-                                </div>
-                                <div class="col-md-auto">
-                                    <button class="iconButton" (click)="lancer()" title="Lancer">
-                                        <i class="fas fa-dice-d20 fa-2x"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-auto"
-                                    *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.first && affichageBossComponent.first.boss.saved && valueDe">
-                                    <button class="btn btn-danger"
-                                        (click)="affichageBossComponent.first.applyToBoss(valueDe)">Appliquer au
-                                        boss</button>
-                                </div>
-                                <ng-container *ngIf="mode.value === 'b'">
-                                    <div class="col-md-auto offset-1" style="font-size: 1.5rem;">
-                                        Round <span style="color: red;">{{nbRound}}</span>
-                                    </div>
-                                    <div class="col-md-auto" *ngIf="ttBoss.length > 0">
-                                        <button class="iconButton" title="Round suivant" (click)="nextRound()">
-                                            <i class="fas fa-forward fa-2x"></i>
+<div class="card bg-dark" id="globalContent" (window:resize)="onResize()">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-md-auto">
+                        <label for="inputDe">Valeur du dé</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input id="inputDe" [(ngModel)]="valueDe" class="myInput inputDe" type="number"
+                            (keydown)="testEnter($event, 'inputDe')">
+                    </div>
+                    <div class="col-md-auto">
+                        <button class="iconButton" (click)="lancer()" title="Lancer">
+                            <i class="fas fa-dice-d20 fa-2x"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-auto"
+                        *ngIf="ttArmeInTable.length === 1 && mode.value === 'c' && affichageBossComponent && affichageBossComponent.first && affichageBossComponent.first.boss.saved && valueDe">
+                        <button class="btn btn-danger"
+                            (click)="affichageBossComponent.first.applyToBoss(valueDe)">
+                            Appliquer au boss
+                        </button>
+                    </div>
+                    <ng-container *ngIf="mode.value === 'b'">
+                        <div class="col-md-auto offset-1" style="font-size: 1.5rem;">
+                            Round <span style="color: red;">{{nbRound}}</span>
+                        </div>
+                        <div class="col-md-auto" *ngIf="ttBoss.length > 0">
+                            <button class="iconButton" title="Round suivant" (click)="nextRound()">
+                                <i class="fas fa-forward fa-2x"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-auto" *ngIf="nbRound > 1">
+                            <button class="iconButton" title="Raz Round" (click)="nbRound = 1">
+                                <i class="fas fa-undo fa-2x"></i>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <div class="col text-right">
+                        <button class="iconButton" id="btnSwitchMod" (click)="switchBossMod()" title="Mode Boss">
+                            <i class="fas fa-skull fa-2x"
+                                [ngStyle]="{ 'color': mode.value === 'c' ? 'white' :'red' }"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col" *ngIf="nbRelance > 0">
+                        {{nbRelance}} Relance(s) sur critique disponnible(s)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchTranchante"
+                                id="switchTranchante" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switchTranchante">
+                                Tranchantes à 1 main
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchContondante"
+                                id="switchContondante" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switchContondante">
+                                Contondante
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switch2Mains"
+                                id="switch2Mains" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switch2Mains">
+                                2 mains
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPerfo"
+                                id="switchPerfo" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switchPerfo">
+                                Perforation
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchEclair"
+                                id="switchEclair" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switchEclair">
+                                Sort eclair
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchBoule"
+                                id="switchBoule" (change)="lancer($event)">
+                            <label class="custom-control-label" for="switchBoule">
+                                Sort boule
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto" *ngIf="mode.value === 'c'">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchToutArme"
+                                id="switchToutArme" (change)="checkAllWeapon()">
+                            <label class="custom-control-label" for="switchToutArme">
+                                Tout
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="mode.value === 'c'">
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPlates"
+                                id="switchPlates" (change)="lancer()">
+                            <label class="custom-control-label" for="switchPlates">
+                                Plates
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchCuirasse"
+                                id="switchCuirasse" (change)="lancer()">
+                            <label class="custom-control-label" for="switchCuirasse">
+                                Cuirasse
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchEcailles"
+                                id="switchEcailles" (change)="lancer()">
+                            <label class="custom-control-label" for="switchEcailles">
+                                Ecailles
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchMaille"
+                                id="switchMaille" (change)="lancer()">
+                            <label class="custom-control-label" for="switchMaille">
+                                Maille
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchCuirRigide"
+                                id="switchCuirRigide" (change)="lancer()">
+                            <label class="custom-control-label" for="switchCuirRigide">
+                                Cuir Rigide
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchCuirSouple"
+                                id="switchCuirSouple" (change)="lancer()">
+                            <label class="custom-control-label" for="switchCuirSouple">
+                                Cuir Souple
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchSansArmure"
+                                id="switchSansArmure" (change)="lancer()">
+                            <label class="custom-control-label" for="switchSansArmure">
+                                Sans Armure
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="switchToutArmor"
+                                id="switchToutArmor" (change)="checkAllArmor()">
+                            <label class="custom-control-label" for="switchToutArmor">
+                                Tout
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+                    <div class="card-body corps" id="zoneClassique" *ngIf="mode.value === 'c'">
+                        <table class="table table-dark">
+                            <thead [innerHTML]="tableHead">
+                            </thead>
+                            <tbody [innerHTML]="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-body" id="zoneBoss" *ngIf="mode.value === 'b'">
+                        <div class="row">
+                            <div class="col-md-auto">
+                                <button class="iconButton" (click)="addBoss()" title="Ajouter un Boss">
+                                    <i class="fas fa-plus-circle fa-2x"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-4" *ngFor="let b of ttBoss">
+                                        <button class="iconButton" *ngIf="!b.saved" title="supprimer"
+                                            (click)="deleteBoss(b)">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
-                                    </div>
-                                    <div class="col-md-auto" *ngIf="nbRound > 1">
-                                        <button class="iconButton" title="Raz Round" (click)="nbRound = 1">
-                                            <i class="fas fa-undo fa-2x"></i>
-                                        </button>
-                                    </div>
-                                </ng-container>
-                                <div class="col text-right">
-                                    <button class="iconButton" id="btnSwitchMod" (click)="switchBossMod()"
-                                        title="Mode Boss">
-                                        <i class="fas fa-skull fa-2x"
-                                            [ngStyle]="{ 'color': mode.value === 'c' ? 'white' :'red' }"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col" *ngIf="nbRelance > 0">
-                                    {{nbRelance}} Relance(s) sur critique disponnible(s)
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchTranchante" id="switchTranchante"
-                                            (change)="lancer($event)">
-                                        <label class="custom-control-label" for="switchTranchante">
-                                            Tranchantes à 1 main
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchContondante" id="switchContondante"
-                                            (change)="lancer($event)">
-                                        <label class="custom-control-label" for="switchContondante">
-                                            Contondante
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switch2Mains"
-                                            id="switch2Mains" (change)="lancer($event)">
-                                        <label class="custom-control-label" for="switch2Mains">
-                                            2 mains
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPerfo"
-                                            id="switchPerfo" (change)="lancer($event)">
-                                        <label class="custom-control-label" for="switchPerfo">
-                                            Perforation
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto" *ngIf="mode.value === 'c'">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchToutArme"
-                                            id="switchToutArme" (change)="checkAllWeapon()">
-                                        <label class="custom-control-label" for="switchToutArme">
-                                            Tout
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" *ngIf="mode.value === 'c'">
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchPlates"
-                                            id="switchPlates" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchPlates">
-                                            Plates
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchCuirasse"
-                                            id="switchCuirasse" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchCuirasse">
-                                            Cuirasse
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchEcailles"
-                                            id="switchEcailles" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchEcailles">
-                                            Ecailles
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="switchMaille"
-                                            id="switchMaille" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchMaille">
-                                            Maille
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchCuirRigide" id="switchCuirRigide" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchCuirRigide">
-                                            Cuir Rigide
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchCuirSouple" id="switchCuirSouple" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchCuirSouple">
-                                            Cuir Souple
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchSansArmure" id="switchSansArmure" (change)="lancer()">
-                                        <label class="custom-control-label" for="switchSansArmure">
-                                            Sans Armure
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-auto">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input"
-                                            [(ngModel)]="switchToutArmor" id="switchToutArmor"
-                                            (change)="checkAllArmor()">
-                                        <label class="custom-control-label" for="switchToutArmor">
-                                            Tout
-                                        </label>
+                                        <ng-container *ngIf="b.saved">
+                                            <button class="iconButton" (click)="applyToBoss(b)"
+                                                title="Appliquer jet de dé">
+                                                <i class="fas fa-fist-raised"></i>
+                                            </button>
+                                        </ng-container>
+                                        <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b"
+                                            [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
+                                            (setNbRelance)="updateNbRelance($event)">
+                                        </app-affichage-boss>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card bg-dark">
-                                <div class="card-body corps" id="zoneClassique" *ngIf="mode.value === 'c'">
-                                    <table class="table table-dark">
-                                        <thead [innerHTML]="tableHead">
-                                        </thead>
-                                        <tbody [innerHTML]="tableBody">
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="card-body corps" id="zoneBoss" *ngIf="mode.value === 'b'">
-                                    <div class="row">
-                                        <div class="col-md-auto">
-                                            <button class="iconButton" (click)="addBoss()" title="Ajouter un Boss">
-                                                <i class="fas fa-plus-circle fa-2x"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <div class="row">
-                                                <div class="col-md-4" *ngFor="let b of ttBoss">
-                                                    <button class="iconButton" *ngIf="!b.saved" title="supprimer"
-                                                        (click)="deleteBoss(b)">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                    <ng-container *ngIf="b.saved">
-                                                        <button class="iconButton" (click)="applyToBoss(b)"
-                                                            title="Appliquer jet de dé">
-                                                            <i class="fas fa-fist-raised"></i>
-                                                        </button>
-                                                    </ng-container>
-                                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="b"
-                                                        [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
-                                                        (setNbRelance)="updateNbRelance($event)">
-                                                    </app-affichage-boss>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="row" *ngIf="mode.value === 'c'">
-                                <div class="col">
-                                    <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss"
-                                        [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
-                                        (setNbRelance)="updateNbRelance($event)">
-                                    </app-affichage-boss>
-                                </div>
-                            </div>
-                            <div class="row mt-2 mb-1">
-                                <div class="col">
-                                    <button class="btn btn-primary" (click)="strChat = ''; updateChat()">Clear</button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div id="chat">
-                                            </div>
-                                        </div>
-                                    </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row" *ngIf="mode.value === 'c'">
+                    <div class="col">
+                        <app-affichage-boss [ttArmeInTable]="ttArmeInTable" [boss]="boss"
+                            [modeBoss]="mode.value === 'b'" (addInChat)="updateChat($event)"
+                            (setNbRelance)="updateNbRelance($event)">
+                        </app-affichage-boss>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-1">
+                    <div class="col">
+                        <button class="btn btn-primary" (click)="strChat = ''; updateChat()">Clear</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="chat">
                                 </div>
                             </div>
                         </div>

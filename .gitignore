@@ -9,6 +9,7 @@
 
 # dependencies
 /nedeDegatAngular/node_modules
+/nedeDegatAngular/release
 
 # profiling files
 chrome-profiler-events*.json

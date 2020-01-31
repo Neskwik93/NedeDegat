@@ -14,6 +14,7 @@ import * as global from '../assets/data/global';
 export class AppComponent implements OnInit, OnDestroy {
     @ViewChildren(AffichageBossComponent) affichageBossComponent: QueryList<AffichageBossComponent>;
 
+    corps: any;
     valueDe: any;
     mode: any = {
         value: 'c'
@@ -25,6 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
     switchContondante: boolean = true;
     switch2Mains: boolean = true;
     switchPerfo: boolean = true;
+    switchEclair: boolean = true;
+    switchBoule: boolean = true;
     switchToutArme: boolean = true;
 
     switchPlates: boolean = true;
@@ -53,10 +56,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngAfterViewInit() {
         this.initChat();
+        this.corps = document.getElementsByClassName('corps')[0];
+        this.onResize()
     }
 
     ngOnDestroy() {
         this._changeDetectorRef.detach()
+    }
+
+    onResize() {
+        document.getElementById('globalContent').style.height = window.innerHeight.toString() + 'px';
+        this.corps.style.height = (window.innerHeight * 0.8) + 'px';
     }
 
     lancer(event = null) {
@@ -83,7 +93,16 @@ export class AppComponent implements OnInit, OnDestroy {
             this.ttArmeInTable.push('ttPerforation');
             this.uncheckedSwitch(event, 'switchPerfo')
         }
-
+        if (this.switchEclair) {
+            this.generateTable(global.ttSortEclair, 'Sort eclair');
+            this.ttArmeInTable.push('ttSortEclair');
+            this.uncheckedSwitch(event, 'switchEclair')
+        }
+        if (this.switchBoule) {
+            this.generateTable(global.ttSortBoule, 'Sort boule');
+            this.ttArmeInTable.push('ttSortBoule');
+            this.uncheckedSwitch(event, 'switchBoule')
+        }
     }
 
     checkFirstComponent() {
@@ -150,8 +169,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     generateTable(ttValue, titre) {
         let valueUsed;
-        if (this.valueDe && this.valueDe > 150) {
-            valueUsed = 150;
+        if (this.valueDe && this.valueDe > ttValue[ttValue.length - 1].max) {
+            valueUsed = ttValue[ttValue.length - 1].max;
         } else {
             valueUsed = this.valueDe;
         }
@@ -184,6 +203,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.switchContondante = this.switchToutArme;
         this.switch2Mains = this.switchToutArme;
         this.switchPerfo = this.switchToutArme;
+        this.switchEclair = this.switchToutArme;
+        this.switchBoule = this.switchToutArme;
         this.lancer();
     }
 
@@ -211,6 +232,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.switchContondante = false;
         this.switch2Mains = false;
         this.switchPerfo = false;
+        this.switchEclair = false;
+        this.switchBoule = false;
     }
 
     addBoss() {
@@ -226,12 +249,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     nextRound() {
         this.nbRound++;
-        if(this.affichageBossComponent)
-        this.affichageBossComponent.forEach(bc => {
-            if(bc.degatParTour > 0 && bc.boss.saved) {
-                bc.applyDegat(bc.degatParTour);
-            }
-        });
+        this.updateChat('<span style="color: red;">On passe au Round <strong>'+ this.nbRound +'</strong> !</span><hr>');
+        if (this.affichageBossComponent)
+            this.affichageBossComponent.forEach(bc => {
+                if (bc.degatParTour > 0 && bc.boss.saved) {
+                    bc.applyDegat(bc.degatParTour);
+                }
+            });
     }
 
     initChat() {

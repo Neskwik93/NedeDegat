@@ -25,6 +25,7 @@ export class AffichageBossComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        console.log(this.modeBoss)
     }
 
     testEnter(event, type) {
@@ -62,43 +63,55 @@ export class AffichageBossComponent implements OnInit {
         this.nbRelance = 0;
         let valueUsed = deValue;
         let reste = 0;
+        let ttArmeUtilise = global[this.ttArmeInTable[0]]
+        let maxValOnArmeTable = ttArmeUtilise[ttArmeUtilise.length - 1].max;
         valueUsed = valueUsed - this.boss.bd;
         valueUsed = valueUsed < 0 ? 0 : valueUsed;
-        if (valueUsed && valueUsed > 150) {
-            reste = valueUsed - 150;
+        if (valueUsed && valueUsed > maxValOnArmeTable) {
+            reste = valueUsed - maxValOnArmeTable;
             while (reste >= 20) {
                 reste -= 20;
                 this.nbRelance++
             }
-            valueUsed = 150;
+            valueUsed = maxValOnArmeTable;
         }
         this.setNbRelance.emit(this.nbRelance);
         let val = global[this.ttArmeInTable[0]].find(degat => valueUsed >= degat.min && valueUsed <= degat.max);
         let degat = val[this.boss.armure];
         let critique;
         if (typeof degat === 'string') {
-            critique = degat[degat.length - 1];
-            degat = +degat.slice(0, degat.length - 1);
-        }
-        this.applyDegat(degat, critique);
-    }
-
-    applyDegat(degat, critique = null) {
-        let strToReturn = '';
-        if (this.boss.pv > 0) {
-            this.boss.pv -= degat;
-            if (this.boss.pv <= 0) {
-                this.boss.pv = 0;
-                strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche ';
-                strToReturn += '<strong><span style="color: red">IL EST MORT SA RACE !</span></strong>';
+            if (degat.length > 1) { //si non ça veut dire que c'est juste E qui veut dire echec
+                critique = degat[degat.length - 1];
+                degat = +degat.slice(0, degat.length - 1);
+                this.applyDegat(degat, critique);
             } else {
-                strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche' + (critique ? ' et un <strong>critique ' + critique + '</strong> ' : ' ');
-                strToReturn += 'il lui reste <span style="color: red">' + this.boss.pv + ' PV.</span>';
+                this.applyDegat(null, null, true);
             }
         } else {
-            strToReturn += '<strong>' + this.boss.name + '</strong> est mort, fais en un nouveau';
+            this.applyDegat(degat);
         }
-        strToReturn += '<br>';
+    }
+
+    applyDegat(degat = 0, critique = null, echec = false) {
+        let strToReturn = '';
+        if (echec) {
+            strToReturn += 'Possible maladresse <strong>(t\'es pas très fort)</strong>';
+        } else {
+            if (this.boss.pv > 0) {
+                this.boss.pv -= degat;
+                if (this.boss.pv <= 0) {
+                    this.boss.pv = 0;
+                    strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche ';
+                    strToReturn += '<strong><span style="color: red">IL EST MORT SA RACE !</span></strong>';
+                } else {
+                    strToReturn += '<strong>' + this.boss.name + '</strong> a prit <span style="color: red">-' + degat + ' PV</span> dans la tronche' + (critique ? ' et un <strong>critique ' + critique + '</strong> ' : ' ');
+                    strToReturn += 'il lui reste <span style="color: red">' + this.boss.pv + ' PV.</span>';
+                }
+            } else {
+                strToReturn += '<strong>' + this.boss.name + '</strong> est mort, fais en un nouveau';
+            }
+        }
+        strToReturn += '<br><hr>';
         this.addInChat.emit(strToReturn);
     }
 }
