@@ -25,7 +25,6 @@ export class AffichageBossComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        console.log(this.modeBoss)
     }
 
     testEnter(event, type) {
@@ -77,7 +76,7 @@ export class AffichageBossComponent implements OnInit {
         }
         this.setNbRelance.emit(this.nbRelance);
         let val = global[this.ttArmeInTable[0]].find(degat => valueUsed >= degat.min && valueUsed <= degat.max);
-        let degat = val[this.boss.armure];
+        let degat = val ? val[this.boss.armure] : (deValue < 36 ? 'E' : 0);
         let critique;
         if (typeof degat === 'string') {
             if (degat.length > 1) { //si non ça veut dire que c'est juste E qui veut dire echec
